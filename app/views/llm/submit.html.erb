@@ -1,0 +1,221 @@
+<div class="min-h-screen bg-[#FFF0F1]">
+  <!-- Navigation -->
+  <nav class="bg-white border-b-4 border-black p-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-black text-black">Resume Optimizer</h1>
+      <div class="flex gap-3">
+        <%= link_to "Home", root_path, class: "px-3 py-2 text-sm bg-white text-black font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+        <%= link_to "Template", llm_show_path, class: "px-3 py-2 text-sm bg-white text-black font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+        <%= link_to "Optimize", llm_submit_path, class: "px-3 py-2 text-sm bg-[#FF4757] text-white font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-[#FF4757] border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 mb-8">
+        <h1 class="text-3xl md:text-4xl font-black text-white uppercase">Resume Optimizer</h1>
+        <p class="text-white font-bold mt-2">Tailor your resume to match job requirements</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="pb-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      <%= turbo_frame_tag "llm_form" do %>
+        <% if @errors&.any? %>
+          <div class="bg-red-500 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-4 mb-6">
+            <h3 class="font-black text-white uppercase mb-2">Input Error</h3>
+            <ul class="text-white font-bold text-sm">
+              <% @errors.each do |error| %>
+                <li><%= error %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 mb-8">
+          <%= form_with url: llm_submit_path, method: :post, class: "space-y-6" do |f| %>
+            <!-- Job Description -->
+            <div>
+              <label for="job_description" class="block text-lg font-black text-black mb-3 uppercase">Job Description</label>
+              <textarea name="job_description" id="job_description" rows="8" maxlength="7000"
+                class="w-full px-4 py-3 border-4 border-black focus:border-[#FF4757] focus:outline-none font-mono text-sm resize-y"
+                placeholder="Paste the job description here..."><%= @job_description %></textarea>
+              <div class="mt-1 text-sm font-bold">
+                <span id="job_description_count" class="text-gray-600">0</span>
+                <span class="text-gray-400">/ 7000</span>
+              </div>
+            </div>
+
+            <!-- Resume Data -->
+            <div>
+              <label for="resume" class="block text-lg font-black text-black mb-3 uppercase">Your Resume Data</label>
+              <textarea name="resume" id="resume" rows="8" maxlength="6000"
+                class="w-full px-4 py-3 border-4 border-black focus:border-[#FF4757] focus:outline-none font-mono text-sm resize-y"
+                placeholder="Paste your resume content here..."><%= @resume %></textarea>
+              <div class="mt-1 text-sm font-bold">
+                <span id="resume_count" class="text-gray-600">0</span>
+                <span class="text-gray-400">/ 6000</span>
+              </div>
+            </div>
+
+            <!-- Prompt Type -->
+            <div>
+              <label for="prompt_type" class="block text-lg font-black text-black mb-3 uppercase">Optimization Type</label>
+              <select name="prompt_type" id="prompt_type"
+                class="w-full md:w-auto px-4 py-3 border-4 border-black focus:border-[#FF4757] focus:outline-none bg-white font-bold cursor-pointer">
+                <option value="recruiter-simple" <%= 'selected' if @prompt_type == 'recruiter-simple' %>>Analysis + Suggestions</option>
+                <option value="recruiter-writer" <%= 'selected' if @prompt_type == 'recruiter-writer' %>>Generate Tailored Resume</option>
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+              <button type="submit" id="submit-btn"
+                class="px-12 py-4 bg-[#FF4757] text-white font-black text-xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all uppercase disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="btn-text">Generate Optimization</span>
+                <span id="btn-loading" class="hidden items-center">
+                  <svg class="animate-spin inline-block w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </span>
+              </button>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Result Section -->
+        <% if @result %>
+          <!-- Result Container -->
+          <div class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]" id="result-section">
+            <div class="bg-[#FF4757] border-b-4 border-black p-4 flex justify-between items-center">
+              <h2 class="text-xl font-black text-white uppercase">Optimization Result</h2>
+              <div class="flex items-center gap-4">
+                <button onclick="copyResult()"
+                  class="px-4 py-2 bg-white text-black font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(255,255,255,0.5)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-sm uppercase">
+                  Copy Result
+                </button>
+                <span id="copyStatus" class="text-white font-bold hidden">Copied!</span>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <pre class="whitespace-pre-wrap text-black text-sm leading-relaxed font-mono"><%= @result %></pre>
+            </div>
+          </div>
+
+          <textarea id="hiddenResult" class="absolute -left-[9999px]"><%= @result %></textarea>
+
+          <script>
+            function copyResult() {
+              var textarea = document.getElementById('hiddenResult');
+              textarea.select();
+              textarea.setSelectionRange(0, 99999);
+
+              try {
+                document.execCommand('copy');
+                var status = document.getElementById('copyStatus');
+                status.classList.remove('hidden');
+                setTimeout(function() {
+                  status.classList.add('hidden');
+                }, 2000);
+              } catch (err) {
+                alert('Failed to copy. Please select the code manually and copy.');
+              }
+            }
+
+            // Scroll to result
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+          </script>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white py-6 px-4 border-t-4 border-[#FF4757] mt-auto">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="font-bold">Built with Ruby on Rails + Tailwind CSS</p>
+      <p class="text-sm mt-2 text-gray-400">Neobrutalism Design System</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Show loading state on form submit
+  document.addEventListener('turbo:submit-start', function(event) {
+    var btn = document.getElementById('submit-btn');
+    var btnText = document.getElementById('btn-text');
+    var btnLoading = document.getElementById('btn-loading');
+    if (btn && btnText && btnLoading) {
+      btn.disabled = true;
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      btnLoading.classList.add('inline-flex');
+    }
+  });
+
+  // Reset button state after response
+  document.addEventListener('turbo:submit-end', function(event) {
+    var btn = document.getElementById('submit-btn');
+    var btnText = document.getElementById('btn-text');
+    var btnLoading = document.getElementById('btn-loading');
+    if (btn && btnText && btnLoading) {
+      btn.disabled = false;
+      btnText.classList.remove('hidden');
+      btnLoading.classList.add('hidden');
+      btnLoading.classList.remove('inline-flex');
+    }
+  });
+
+  // Character counter
+  function updateCounter(textareaId, counterId, maxLength) {
+    var textarea = document.getElementById(textareaId);
+    var counter = document.getElementById(counterId);
+    if (textarea && counter) {
+      var length = textarea.value.length;
+      counter.textContent = length;
+      if (length >= maxLength * 0.9) {
+        counter.classList.remove('text-gray-600');
+        counter.classList.add('text-red-500');
+      } else {
+        counter.classList.remove('text-red-500');
+        counter.classList.add('text-gray-600');
+      }
+    }
+  }
+
+  // Setup counters and event listeners
+  function setupCounters() {
+    updateCounter('job_description', 'job_description_count', 7000);
+    updateCounter('resume', 'resume_count', 6000);
+
+    var jobDesc = document.getElementById('job_description');
+    var resume = document.getElementById('resume');
+
+    if (jobDesc) {
+      jobDesc.addEventListener('input', function() {
+        updateCounter('job_description', 'job_description_count', 7000);
+      });
+    }
+    if (resume) {
+      resume.addEventListener('input', function() {
+        updateCounter('resume', 'resume_count', 6000);
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupCounters);
+
+  // Re-initialize after Turbo navigation
+  document.addEventListener('turbo:load', setupCounters);
+
+  // Re-initialize after Turbo frame updates (form re-render)
+  document.addEventListener('turbo:frame-render', setupCounters);
+</script>

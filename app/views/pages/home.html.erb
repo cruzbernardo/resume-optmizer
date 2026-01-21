@@ -1,0 +1,213 @@
+<div class="min-h-screen bg-[#FFF0F1]">
+  <!-- Navigation -->
+  <nav class="bg-white border-b-4 border-black p-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-black text-black">Resume Optimizer</h1>
+      <div class="flex gap-3">
+        <%= link_to "Home", root_path, class: "px-3 py-2 text-sm bg-[#FF4757] text-white font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+        <%= link_to "Template", llm_show_path, class: "px-3 py-2 text-sm bg-white text-black font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+        <%= link_to "Optimize", llm_submit_path, class: "px-3 py-2 text-sm bg-white text-black font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all" %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="py-12 px-4">
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="bg-[#FF4757] border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-white mb-3">
+          Optimize Your Resume for Any Job
+        </h1>
+        <p class="text-base text-white font-bold max-w-2xl mx-auto">
+          Paste your resume + job description as plain text. Get AI-powered suggestions or a fully optimized resume tailored to the position.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Cards Section -->
+  <section class="py-6 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-black text-black text-center mb-8 uppercase">
+        How It Works
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1: Optimize -->
+        <div class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <div class="bg-[#FF4757] border-b-4 border-black p-3">
+            <h3 class="text-lg font-black text-white uppercase">1. Optimize</h3>
+          </div>
+          <div class="p-5">
+            <div class="mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="square" stroke-linejoin="miter" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <p class="text-black font-bold text-sm mb-3">AI-Powered Resume Tailoring</p>
+            <ul class="space-y-2 text-black text-sm">
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Paste your resume as plain text</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Add the job description</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Get suggestions or full rewrite</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Output is plain text, easy to copy</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2: Template -->
+        <div class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <div class="bg-[#FF4757] border-b-4 border-black p-3">
+            <h3 class="text-lg font-black text-white uppercase">2. Template</h3>
+          </div>
+          <div class="p-5">
+            <div class="mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="square" stroke-linejoin="miter" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <p class="text-black font-bold text-sm mb-3">Professional HTML Template</p>
+            <ul class="space-y-2 text-black text-sm">
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Copy the HTML resume template</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Paste into a text editor</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Replace placeholders with your text</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Save as .html file</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 3: Export -->
+        <div class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <div class="bg-[#FF4757] border-b-4 border-black p-3">
+            <h3 class="text-lg font-black text-white uppercase">3. Export PDF</h3>
+          </div>
+          <div class="p-5">
+            <div class="mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="square" stroke-linejoin="miter" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+            </div>
+            <p class="text-black font-bold text-sm mb-3">Print to PDF</p>
+            <ul class="space-y-2 text-black text-sm">
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Open .html file in browser</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Press Ctrl+P (or Cmd+P)</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Select "Save as PDF"</span>
+              </li>
+              <li class="flex items-start">
+                <span class="font-black mr-2 text-[#FF4757]">></span>
+                <span>Professional resume ready!</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step by Step Section -->
+  <section class="py-10 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6">
+        <h2 class="text-xl font-black text-black mb-6 uppercase text-center">Quick Start Guide</h2>
+
+        <div class="space-y-4 text-sm">
+          <div class="flex items-start gap-4 p-3 bg-[#FFF0F1] border-2 border-black">
+            <span class="bg-[#FF4757] text-white font-black px-3 py-1 border-2 border-black">1</span>
+            <div>
+              <p class="font-bold">Go to <span class="text-[#FF4757]">Optimize</span> page</p>
+              <p class="text-gray-600">Paste your resume and the job description as plain text</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-3 bg-[#FFF0F1] border-2 border-black">
+            <span class="bg-[#FF4757] text-white font-black px-3 py-1 border-2 border-black">2</span>
+            <div>
+              <p class="font-bold">Choose optimization type</p>
+              <p class="text-gray-600">"Analysis + Suggestions" for tips, or "Generate Tailored Resume" for full rewrite</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-3 bg-[#FFF0F1] border-2 border-black">
+            <span class="bg-[#FF4757] text-white font-black px-3 py-1 border-2 border-black">3</span>
+            <div>
+              <p class="font-bold">Copy the optimized result</p>
+              <p class="text-gray-600">Use the "Copy Result" button to copy the plain text output</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-3 bg-[#FFF0F1] border-2 border-black">
+            <span class="bg-[#FF4757] text-white font-black px-3 py-1 border-2 border-black">4</span>
+            <div>
+              <p class="font-bold">Go to <span class="text-[#FF4757]">Template</span> page</p>
+              <p class="text-gray-600">Copy the HTML template and save as resume.html on your computer</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-3 bg-[#FFF0F1] border-2 border-black">
+            <span class="bg-[#FF4757] text-white font-black px-3 py-1 border-2 border-black">5</span>
+            <div>
+              <p class="font-bold">Edit and export</p>
+              <p class="text-gray-600">Replace placeholders with your optimized text, open in browser, Print > Save as PDF</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-10 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="bg-[#FF4757] border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6">
+        <h2 class="text-xl font-black text-white mb-4">Ready to Get Started?</h2>
+        <p class="text-white text-sm mb-6">Tailor your resume to any job in minutes</p>
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+          <%= link_to llm_show_path, class: "inline-block px-6 py-3 bg-white text-black font-black text-sm border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all uppercase" do %>
+            View Template
+          <% end %>
+          <%= link_to llm_submit_path, class: "inline-block px-6 py-3 bg-black text-white font-black text-sm border-4 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] transition-all uppercase" do %>
+            Start Optimizing
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white py-4 px-4 border-t-4 border-[#FF4757]">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="font-bold text-sm">Built with Ruby on Rails + Tailwind CSS</p>
+    </div>
+  </footer>
+</div>

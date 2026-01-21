@@ -1,0 +1,304 @@
+---
+openapi: 3.0.1
+info:
+  title: Resume Generator API
+  version: v1
+  description: |
+    API for generating tailored resumes using LLM (Groq/Llama).
+
+    Features:
+    - Resume analysis and suggestions
+    - HTML resume generation
+    - Health checks and rate limit monitoring
+
+paths:
+  "/health":
+    get:
+      summary: Check application health
+      tags:
+      - Health
+      description: Returns the health status of the application and its services (Redis, Groq)
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Application is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  "/health/rate_limits":
+    get:
+      summary: Check Groq API rate limits
+      tags:
+      - Health
+      description: |
+        Returns current rate limit status from Groq API.
+        **Note:** This endpoint uses ~1 token per call.
+      responses:
+        '200':
+          description: Rate limits retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitsResponse'
+
+  "/health/llm_rate_limits":
+    get:
+      summary: Check stored LLM rate limits from Redis
+      tags:
+      - Health
+      description: |
+        Returns the LLM rate limits stored in Redis.
+        **Note:** This endpoint does NOT call the Groq API - it only reads from Redis.
+        Use this to check token availability without consuming tokens.
+      responses:
+        '200':
+          description: Stored rate limits retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LlmRateLimitsResponse'
+
+  "/up":
+    get:
+      summary: Rails built-in health check
+      tags:
+      - Health
+      description: Built-in Rails health check endpoint for load balancers
+      responses:
+        '200':
+          description: Application is up
+
+  "/llm/submit":
+    get:
+      summary: Show resume generator form
+      tags:
+      - LLM
+      description: Displays the form to input job description and resume data
+      responses:
+        '200':
+          description: Form page rendered successfully
+          content:
+            text/html:
+              schema:
+                type: string
+
+    post:
+      summary: Generate resume analysis or HTML resume
+      tags:
+      - LLM
+      description: |
+        Submits job description and resume to the LLM for processing.
+
+        **Prompt Types:**
+        - `recruiter-simple`: Returns analysis with suggestions and study topics
+        - `recruiter-writer`: Returns a formatted HTML resume
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                job_description:
+                  type: string
+                  description: The job posting/description to tailor the resume for
+                  example: "We are looking for a Backend Developer with Node.js experience..."
+                resume:
+                  type: string
+                  description: The candidate's resume data in plain text
+                  example: "John Doe\nBackend Developer\n5 years experience..."
+                prompt_type:
+                  type: string
+                  enum: [recruiter-simple, recruiter-writer]
+                  description: Type of analysis to perform
+                  example: recruiter-simple
+              required:
+                - job_description
+                - resume
+                - prompt_type
+      responses:
+        '200':
+          description: Resume processed successfully
+          content:
+            text/html:
+              schema:
+                type: string
+                description: HTML page with the result
+
+  "/llm/show":
+    get:
+      summary: Show HTML resume template
+      tags:
+      - LLM
+      description: Displays the HTML template used for resume generation with copy functionality
+      responses:
+        '200':
+          description: Template page rendered successfully
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          example: healthy
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-01-21T18:00:00Z'
+        services:
+          type: object
+          properties:
+            redis:
+              type: string
+              enum: [connected, disconnected]
+              example: connected
+            groq:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [connected, disconnected]
+                  example: connected
+                model:
+                  type: string
+                  example: llama-3.3-70b-versatile
+      required:
+        - status
+        - timestamp
+        - services
+
+    RateLimitsResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-01-21T18:00:00Z'
+        model:
+          type: string
+          example: llama-3.3-70b-versatile
+        rate_limits:
+          type: object
+          properties:
+            tokens:
+              type: object
+              properties:
+                remaining:
+                  type: string
+                  example: "11963"
+                limit:
+                  type: string
+                  example: "12000"
+                resets_at:
+                  type: string
+                  example: "185ms"
+            requests:
+              type: object
+              properties:
+                remaining:
+                  type: string
+                  example: "997"
+                limit:
+                  type: string
+                  example: "1000"
+                resets_at:
+                  type: string
+                  example: "4m19.2s"
+        error:
+          type: string
+          nullable: true
+          example: null
+
+    LlmRateLimitsResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-01-21T18:00:00Z'
+        stored:
+          type: boolean
+          description: Whether rate limits are stored in Redis
+          example: true
+        message:
+          type: string
+          nullable: true
+          description: Message when no data is stored
+          example: null
+        data:
+          type: object
+          nullable: true
+          description: Rate limit data (only present when stored is true)
+          properties:
+            remaining_tokens:
+              type: string
+              example: "14500"
+            limit_tokens:
+              type: string
+              example: "15000"
+            reset_tokens:
+              type: string
+              example: "1m30s"
+            stored_at:
+              type: string
+              format: date-time
+              example: '2026-01-21T17:59:00Z'
+            reset_at:
+              type: string
+              format: date-time
+              example: '2026-01-21T18:00:30Z'
+            reset_happened:
+              type: boolean
+              description: Whether the rate limit has already reset
+              example: false
+            seconds_until_reset:
+              type: integer
+              description: Seconds until rate limit resets (0 if already reset)
+              example: 30
+        daily_usage:
+          type: object
+          description: Daily token usage tracking (resets at midnight UTC)
+          properties:
+            tokens_used:
+              type: integer
+              description: Tokens used today
+              example: 15000
+            tokens_limit:
+              type: integer
+              description: Daily token limit
+              example: 95000
+            tokens_remaining:
+              type: integer
+              description: Tokens remaining for today
+              example: 80000
+            date:
+              type: string
+              description: Current date (UTC)
+              example: '2026-01-21'
+            resets_at:
+              type: string
+              format: date-time
+              description: When the daily counter resets
+              example: '2026-01-22T00:00:00Z'
+            seconds_until_reset:
+              type: integer
+              description: Seconds until midnight UTC
+              example: 21600
+
+servers:
+- url: http://localhost:3000
+  description: Development server
