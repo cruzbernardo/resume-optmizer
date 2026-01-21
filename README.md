@@ -111,6 +111,22 @@ bundle exec rspec spec/services/
 bundle exec rspec spec/services/llm_service_spec.rb
 ```
 
+## Deployment (Render)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+### Manual Deploy
+
+1. Create a **Web Service** with:
+   - Build: `./bin/render-build.sh`
+   - Start: `bundle exec puma -C config/puma.rb`
+2. Create a **Redis** instance In leapcell
+3. Add environment variables:
+   - `RAILS_ENV=production`
+   - `REDIS_URL` (from Redis instance)
+   - `RAILS_MASTER_KEY`
+   - `GROQ_API_KEY`
+
 ## Development
 
 ```bash
