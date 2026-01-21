@@ -95,14 +95,27 @@ The application implements two levels of rate limiting:
 | `GET /health/llm_rate_limits` | Stored rate limits from Redis |
 | `GET /api-docs` | Swagger documentation |
 
+## Testing
+
+```bash
+# Run all tests
+bundle exec rspec
+
+# Run tests with detailed output
+bundle exec rspec --format documentation
+
+# Run only service tests
+bundle exec rspec spec/services/
+
+# Run a specific test file
+bundle exec rspec spec/services/llm_service_spec.rb
+```
+
 ## Development
 
 ```bash
 # Run with Docker Compose
 docker-compose up
-
-# Run tests
-bundle exec rspec
 
 # Generate Swagger docs
 bundle exec rake rswag:specs:swaggerize

@@ -21,6 +21,18 @@ RSpec.describe 'Health API', type: :request do
           },
           required: %w[status timestamp services]
 
+        before do
+          # Mock Redis to be connected
+          redis_mock = instance_double(Redis)
+          allow(Redis).to receive(:new).and_return(redis_mock)
+          allow(redis_mock).to receive(:ping).and_return('PONG')
+          # Mock GROQ_API_KEY to be present
+          allow(ENV).to receive(:fetch).and_call_original
+          allow(ENV).to receive(:fetch).with('GROQ_API_KEY', nil).and_return('test_api_key')
+          allow(ENV).to receive(:fetch).with('GROQ_MODEL', 'llama-3.3-70b-versatile').and_return('llama-3.3-70b-versatile')
+          allow(ENV).to receive(:fetch).with('REDIS_URL', 'redis://localhost:6379/0').and_return('redis://localhost:6379/0')
+        end
+
         run_test!
       end
 
@@ -37,10 +49,17 @@ RSpec.describe 'Health API', type: :request do
             }
           }
 
-        run_test! do
-          # This test would need Redis to be down to pass
-          # Skipping actual run for unhealthy state
+        before do
+          # Mock Redis to be disconnected
+          allow(Redis).to receive(:new).and_raise(Redis::CannotConnectError, 'Connection refused')
+          # Mock ENV
+          allow(ENV).to receive(:fetch).and_call_original
+          allow(ENV).to receive(:fetch).with('GROQ_API_KEY', nil).and_return(nil)
+          allow(ENV).to receive(:fetch).with('GROQ_MODEL', 'llama-3.3-70b-versatile').and_return('llama-3.3-70b-versatile')
+          allow(ENV).to receive(:fetch).with('REDIS_URL', 'redis://localhost:6379/0').and_return('redis://localhost:6379/0')
         end
+
+        run_test!
       end
     end
   end
@@ -94,6 +113,14 @@ RSpec.describe 'Health API', type: :request do
             }
           },
           required: %w[timestamp stored daily_usage]
+
+        before do
+          # Mock Redis
+          redis_mock = instance_double(Redis)
+          allow(Redis).to receive(:new).and_return(redis_mock)
+          allow(redis_mock).to receive(:hgetall).and_return({})
+          allow(redis_mock).to receive(:get).and_return(nil)
+        end
 
         run_test!
       end
